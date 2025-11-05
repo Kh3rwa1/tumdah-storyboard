@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import LandingPage from './components/LandingPage';
-import Step1Character from './components/Step1Character';
-import Step2Style from './components/Step2Style';
+import SetupPage from './components/SetupPage';
 import Step3CreateScene from './components/Step3CreateScene';
 import StoryboardView from './components/StoryboardView';
 import Modal from './components/Modal';
@@ -9,8 +8,7 @@ import { callGeminiAPI, fileToBase64, imageToApiPart, SHOT_TYPES, SKELETON_STATE
 
 const STEPS = {
   LANDING: 'landing',
-  CHARACTER: 'character',
-  STYLE: 'style',
+  SETUP: 'setup',
   SCENE: 'scene',
   STORYBOARD: 'storyboard'
 };
@@ -216,31 +214,23 @@ export default function App() {
     <>
 
       {currentStep === STEPS.LANDING && (
-        <LandingPage onStart={() => setCurrentStep(STEPS.CHARACTER)} />
+        <LandingPage onStart={() => setCurrentStep(STEPS.SETUP)} />
       )}
 
-      {currentStep === STEPS.CHARACTER && (
-        <Step1Character
+      {currentStep === STEPS.SETUP && (
+        <SetupPage
           characterPreview={character.preview}
           onCharacterUpload={handleCharacterUpload}
           savedCharacters={savedCharacters}
           onSaveCharacter={handleSaveCharacter}
           onSelectCharacter={handleSelectCharacter}
           selectedActorId={selectedActorId}
-          onNext={() => setCurrentStep(STEPS.STYLE)}
-          onBack={() => setCurrentStep(STEPS.LANDING)}
-        />
-      )}
-
-      {currentStep === STEPS.STYLE && (
-        <Step2Style
           stylePreview={style.preview}
           onStyleUpload={handleStyleUpload}
           overridePreview={override.preview}
           onOverrideChange={handleOverrideChange}
-          onClearOverride={handleClearOverride}
           onNext={() => setCurrentStep(STEPS.SCENE)}
-          onBack={() => setCurrentStep(STEPS.CHARACTER)}
+          onBack={() => setCurrentStep(STEPS.LANDING)}
         />
       )}
 
@@ -254,7 +244,7 @@ export default function App() {
           stylePreview={style.preview}
           overrideFile={override.file}
           savedCharacters={savedCharacters}
-          onBack={() => setCurrentStep(STEPS.STYLE)}
+          onBack={() => setCurrentStep(STEPS.SETUP)}
         />
       )}
 
