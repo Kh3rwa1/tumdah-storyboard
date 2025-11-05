@@ -10,26 +10,46 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function uploadImage(file, folder, userId) {
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${userId}/${Date.now()}.${fileExt}`;
-  const filePath = `${folder}/${fileName}`;
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}/${Date.now()}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
 
-  const { data, error } = await supabase.storage
-    .from('tumdah-images')
-    .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: false
-    });
+    const buckets = await supabase.storage.listBuckets();
+    const bucketExists = buckets.data?.some(b => b.name === 'tumdah-images');
 
-  if (error) {
+    if (!bucketExists) {
+      const { error: createError } = await supabase.storage.createBucket('tumdah-images', {
+        public: true,
+        fileSizeLimit: 52428800
+      });
+
+      if (createError && !createError.message.includes('already exists')) {
+        console.error('Bucket creation error:', createError);
+      }
+    }
+
+    const { data, error } = await supabase.storage
+      .from('tumdah-images')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      console.error('Upload error:', error);
+      throw new Error(`Upload failed: ${error.message}`);
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('tumdah-images')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  } catch (error) {
+    console.error('uploadImage error:', error);
     throw error;
   }
-
-  const { data: { publicUrl } } = supabase.storage
-    .from('tumdah-images')
-    .getPublicUrl(filePath);
-
-  return publicUrl;
 }
 
 export async function saveCharacter(name, imageUrl, userId) {
