@@ -66,10 +66,8 @@ export default function LandingPage({ onStart }) {
         <div className="max-w-7xl mx-auto">
           <div className="glass-card px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 glass-button rounded-xl">
-                <Film className="w-6 h-6 text-[#1a1a2e]" />
-              </div>
-              <span className="text-xl font-bold text-contrast" style={{fontFamily: 'Poppins'}}>MV Shot Gen</span>
+              <img src="/images (1).png" alt="Tumdah Logo" className="w-10 h-10" />
+              <span className="text-xl font-bold text-contrast" style={{fontFamily: 'Poppins'}}>Tumdah AI Studio</span>
             </div>
             <button
               onClick={onStart}
@@ -119,7 +117,7 @@ export default function LandingPage({ onStart }) {
             <div className="glass-card p-8 max-w-5xl mx-auto">
               <div className="aspect-video frosted-glass rounded-2xl flex items-center justify-center">
                 <div className="text-center">
-                  <Film className="w-24 h-24 mx-auto mb-4 text-[#A1C4FD] opacity-50" />
+                  <Film className="w-24 h-24 mx-auto mb-4 text-[#10B981] opacity-50" />
                   <p className="text-lg font-semibold text-contrast opacity-70">Product Screenshot</p>
                 </div>
               </div>
@@ -147,7 +145,7 @@ export default function LandingPage({ onStart }) {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-black mb-4 text-contrast" style={{fontFamily: 'Poppins'}}>
-              Why Choose MV Shot Gen?
+              Why Choose Tumdah AI Studio?
             </h2>
             <p className="text-xl text-contrast opacity-80 max-w-2xl mx-auto">
               Focus on how it helps you create better content, not just features
@@ -212,80 +210,105 @@ export default function LandingPage({ onStart }) {
         </div>
       </section>
 
-      {/* Pricing Section (Optional) */}
+      {/* Pricing Section */}
       <section className="relative z-10 px-6 py-20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-black mb-4 text-contrast" style={{fontFamily: 'Poppins'}}>
-              Simple, Transparent Pricing
+              Simple, transparent pricing
             </h2>
-            <p className="text-xl text-contrast opacity-80">
-              Start free, upgrade when you need more
+            <p className="text-lg text-contrast opacity-70 mb-8">
+              No contracts. No surprise fees.
             </p>
+
+            {/* Monthly/Yearly Toggle */}
+            <div className="inline-flex glass-card p-1 rounded-full">
+              <button className="px-6 py-2 glass-button rounded-full text-sm font-semibold">
+                MONTHLY
+              </button>
+              <button className="px-6 py-2 rounded-full text-sm font-semibold text-contrast opacity-70 hover:opacity-100 transition-opacity">
+                YEARLY
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* Starter */}
-            <div className="glass-card p-8">
-              <h3 className="text-2xl font-bold mb-2 text-contrast">Starter</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto items-center">
+            {/* Base Plan */}
+            <div className="glass-card p-8 h-full">
               <div className="mb-6">
-                <span className="text-5xl font-black text-contrast">Free</span>
+                <div className="text-5xl font-black text-contrast mb-1">$80</div>
+                <div className="text-sm text-contrast opacity-70">/month</div>
               </div>
-              <button className="w-full glass-button py-3 mb-6 font-bold">
-                Get Started
-              </button>
-              <ul className="space-y-3">
-                {['5 scenes per month', '16:9 aspect ratio', 'Standard quality', 'Community support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-contrast opacity-80">
-                    <Check className="w-5 h-5 text-[#A1C4FD] flex-shrink-0" />
-                    <span>{feature}</span>
+              <h3 className="text-2xl font-bold mb-2 text-contrast">Base</h3>
+              <p className="text-sm text-contrast opacity-70 mb-6">
+                For most businesses that want to optimize web queries
+              </p>
+              <ul className="space-y-3 mb-8">
+                {['All limited links', 'Own analytics platform', 'Chat support', 'Optimize hashtags', 'Unlimited users'].map((feature, i) => (
+                  <li key={i} className="flex items-center gap-3 text-contrast">
+                    <Check className="w-5 h-5 text-[#10B981] flex-shrink-0" />
+                    <span className="text-sm">{feature}</span>
                   </li>
                 ))}
               </ul>
+              <button className="w-full glass-card px-6 py-3 font-semibold text-contrast hover:glass-button transition-all">
+                Downgrade
+              </button>
             </div>
 
-            {/* Pro - Featured */}
-            <div className="glass-card-strong p-8 relative animate-glow">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="glass-button px-4 py-1 text-sm font-bold">
+            {/* Pro Plan - Featured */}
+            <div className="relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                <div className="glass-button px-4 py-1 text-xs font-bold uppercase tracking-wide">
                   MOST POPULAR
                 </div>
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-contrast">Pro</h3>
-              <div className="mb-6">
-                <span className="text-5xl font-black text-contrast">$29</span>
-                <span className="text-contrast opacity-70">/month</span>
+              <div className="glass-button p-10 h-full transform lg:scale-105">
+                <div className="mb-6">
+                  <div className="text-6xl font-black text-white mb-1">$120</div>
+                  <div className="text-sm text-white opacity-90">/month</div>
+                </div>
+                <h3 className="text-3xl font-bold mb-2 text-white">Pro</h3>
+                <p className="text-sm text-white opacity-90 mb-8">
+                  For most businesses that want to optimize web queries
+                </p>
+                <ul className="space-y-4 mb-10">
+                  {['All limited links', 'Own analytics platform', 'Chat support', 'Optimize hashtags', 'Unlimited users'].map((feature, i) => (
+                    <li key={i} className="flex items-center gap-3 text-white">
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4" />
+                      </div>
+                      <span className="text-sm font-medium">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button className="w-full bg-white text-[#10B981] px-6 py-4 rounded-2xl font-bold hover:shadow-lg transition-all">
+                  Upgrade
+                </button>
               </div>
-              <button className="w-full glass-button py-3 mb-6 font-bold">
-                Start Free Trial
-              </button>
-              <ul className="space-y-3">
-                {['Unlimited scenes', 'All aspect ratios', 'HD quality', 'Priority support', 'Custom styles', 'Advanced controls'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-contrast opacity-80">
-                    <Check className="w-5 h-5 text-[#A1C4FD] flex-shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
 
-            {/* Enterprise */}
-            <div className="glass-card p-8">
-              <h3 className="text-2xl font-bold mb-2 text-contrast">Enterprise</h3>
+            {/* Enterprise Plan */}
+            <div className="glass-card p-8 h-full">
               <div className="mb-6">
-                <span className="text-5xl font-black text-contrast">Custom</span>
+                <div className="text-5xl font-black text-contrast mb-1">$260</div>
+                <div className="text-sm text-contrast opacity-70">/month</div>
               </div>
-              <button className="w-full glass-button py-3 mb-6 font-bold">
-                Contact Sales
-              </button>
-              <ul className="space-y-3">
-                {['Everything in Pro', 'API access', 'White labeling', 'Dedicated support', 'Custom training', 'SLA guarantee'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-contrast opacity-80">
-                    <Check className="w-5 h-5 text-[#A1C4FD] flex-shrink-0" />
-                    <span>{feature}</span>
+              <h3 className="text-2xl font-bold mb-2 text-contrast">Enterprise</h3>
+              <p className="text-sm text-contrast opacity-70 mb-6">
+                For most businesses that want to optimize web queries
+              </p>
+              <ul className="space-y-3 mb-8">
+                {['All limited links', 'Own analytics platform', 'Chat support', 'Optimize hashtags', 'Unlimited users'].map((feature, i) => (
+                  <li key={i} className="flex items-center gap-3 text-contrast">
+                    <Check className="w-5 h-5 text-[#10B981] flex-shrink-0" />
+                    <span className="text-sm">{feature}</span>
                   </li>
                 ))}
               </ul>
+              <button className="w-full glass-card px-6 py-3 font-semibold text-contrast hover:glass-button transition-all">
+                Upgrade
+              </button>
             </div>
           </div>
         </div>
@@ -299,7 +322,7 @@ export default function LandingPage({ onStart }) {
               Ready to Create Amazing Scenes?
             </h2>
             <p className="text-xl text-contrast opacity-80 mb-10 max-w-2xl mx-auto">
-              Join thousands of creators using MV Shot Gen to bring their visions to life
+              Join thousands of creators using Tumdah AI Studio to bring their visions to life
             </p>
             <button
               onClick={onStart}
@@ -321,10 +344,8 @@ export default function LandingPage({ onStart }) {
               {/* Logo */}
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 glass-button rounded-xl">
-                    <Film className="w-6 h-6" />
-                  </div>
-                  <span className="text-lg font-bold text-contrast">MV Shot Gen</span>
+                  <img src="/images (1).png" alt="Tumdah Logo" className="w-8 h-8" />
+                  <span className="text-lg font-bold text-contrast">Tumdah AI Studio</span>
                 </div>
                 <p className="text-sm text-contrast opacity-70">
                   Professional storyboard generation powered by AI
@@ -368,7 +389,7 @@ export default function LandingPage({ onStart }) {
             </div>
 
             <div className="border-t border-white/20 pt-6 text-center text-sm text-contrast opacity-70">
-              <p>&copy; 2025 MV Shot Gen. All rights reserved.</p>
+              <p>&copy; 2025 Tumdah AI Studio. All rights reserved.</p>
             </div>
           </div>
         </div>
