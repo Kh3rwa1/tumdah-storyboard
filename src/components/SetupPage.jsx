@@ -93,37 +93,37 @@ export default function SetupPage({
           </div>
 
           {/* Two Column Layout */}
-          <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
 
             {/* LEFT: Character Setup */}
-            <div className="glass-card-strong p-8 lg:p-10 space-y-8 animate-fadeIn hover-lift">
+            <div className="glass-card-strong p-6 space-y-5 animate-fadeIn hover-lift">
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-3 glass-button rounded-2xl">
-                      <User className="w-7 h-7 text-white" />
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-2 glass-button rounded-xl">
+                      <User className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-3xl font-black text-contrast" style={{fontFamily: 'Poppins'}}>
+                      <h2 className="text-2xl font-black text-contrast" style={{fontFamily: 'Poppins'}}>
                         Character
                       </h2>
-                      <p className="text-sm text-contrast/60 font-semibold">Optional</p>
+                      <p className="text-xs text-contrast/60 font-semibold">Optional</p>
                     </div>
                   </div>
-                  <p className="text-contrast/70 mb-6">
-                    Upload your main subject or select from your library
+                  <p className="text-sm text-contrast/70">
+                    Upload your main subject or select from library
                   </p>
                 </div>
-                <div className="px-3 py-1 glass-card rounded-full">
+                <div className="px-2 py-1 glass-card rounded-full">
                   <span className="text-xs font-bold text-[#10B981]">01</span>
                 </div>
               </div>
 
               {/* Actor Library */}
-              <div className="space-y-3">
-                <label htmlFor="actor-library" className="block text-sm font-bold text-contrast uppercase tracking-wider">
+              <div className="space-y-2">
+                <label htmlFor="actor-library" className="block text-xs font-bold text-contrast uppercase tracking-wider">
                   <div className="flex items-center gap-2">
-                    <Library className="w-4 h-4 text-[#10B981]" />
+                    <Library className="w-3 h-3 text-[#10B981]" />
                     Saved Library
                   </div>
                 </label>
@@ -132,7 +132,7 @@ export default function SetupPage({
                     id="actor-library"
                     value={selectedActorId}
                     onChange={handleSelectActor}
-                    className="w-full glass-input p-4 text-contrast font-semibold appearance-none pr-12 cursor-pointer transition-all hover:scale-[1.02]"
+                    className="w-full glass-input p-3 text-sm text-contrast font-semibold appearance-none pr-10 cursor-pointer transition-all hover:scale-[1.02]"
                   >
                     <option value="">Choose from library...</option>
                     {savedCharacters.map(actor => (
@@ -141,19 +141,19 @@ export default function SetupPage({
                       </option>
                     ))}
                   </select>
-                  <ChevronsUpDown className="w-5 h-5 text-contrast/50 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-[#10B981] transition-colors" />
+                  <ChevronsUpDown className="w-4 h-4 text-contrast/50 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-[#10B981] transition-colors" />
                 </div>
               </div>
 
               {/* Upload Character */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-sm font-bold text-contrast uppercase tracking-wider">
+                  <label className="block text-xs font-bold text-contrast uppercase tracking-wider">
                     Upload New
                   </label>
                   {characterPreview && (
-                    <div className="flex items-center gap-2 px-3 py-1 glass-card rounded-full">
-                      <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                    <div className="flex items-center gap-2 px-2 py-1 glass-card rounded-full">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
                       <span className="text-xs font-bold text-[#10B981]">Ready</span>
                     </div>
                   )}
@@ -162,33 +162,33 @@ export default function SetupPage({
                   title=""
                   preview={characterPreview}
                   onFileChange={onCharacterUpload}
-                  icon={<User className="w-10 h-10 text-white" />}
+                  icon={<User className="w-8 h-8 text-white" />}
                   aspectClass="aspect-square"
                 />
               </div>
 
               {/* Save to Library */}
               {characterPreview && (
-                <div className="glass-card p-6 space-y-4 animate-slideUp border-2 border-[#10B981]/20">
-                  <label className="block text-sm font-bold text-contrast uppercase tracking-wider">
+                <div className="glass-card p-4 space-y-3 animate-slideUp border-2 border-[#10B981]/20">
+                  <label className="block text-xs font-bold text-contrast uppercase tracking-wider">
                     <div className="flex items-center gap-2">
-                      <Save className="w-4 h-4 text-[#10B981]" />
+                      <Save className="w-3 h-3 text-[#10B981]" />
                       Save for Later
                     </div>
                   </label>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="Enter name..."
                       value={characterNameInput}
                       onChange={(e) => setCharacterNameInput(e.target.value)}
-                      className="flex-1 glass-input p-4 placeholder-contrast/40 font-semibold"
+                      className="flex-1 glass-input p-3 placeholder-contrast/40 font-semibold text-sm"
                     />
                     <button
                       type="button"
                       onClick={handleSaveClick}
                       disabled={!characterNameInput}
-                      className="px-8 py-4 glass-button font-bold disabled:opacity-40 flex-shrink-0 transition-all hover:scale-105"
+                      className="px-6 py-3 glass-button font-bold text-sm disabled:opacity-40 flex-shrink-0 transition-all hover:scale-105"
                     >
                       Save
                     </button>
@@ -198,38 +198,38 @@ export default function SetupPage({
             </div>
 
             {/* RIGHT: Style Setup */}
-            <div className="glass-card-strong p-8 lg:p-10 space-y-8 animate-fadeIn hover-lift" style={{animationDelay: '0.1s'}}>
+            <div className="glass-card-strong p-6 space-y-5 animate-fadeIn hover-lift" style={{animationDelay: '0.1s'}}>
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-3 glass-button rounded-2xl">
-                      <Palette className="w-7 h-7 text-white" />
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-2 glass-button rounded-xl">
+                      <Palette className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-3xl font-black text-contrast" style={{fontFamily: 'Poppins'}}>
+                      <h2 className="text-2xl font-black text-contrast" style={{fontFamily: 'Poppins'}}>
                         Visual Style
                       </h2>
-                      <p className="text-sm text-contrast/60 font-semibold">Required</p>
+                      <p className="text-xs text-contrast/60 font-semibold">Required</p>
                     </div>
                   </div>
-                  <p className="text-contrast/70 mb-6">
+                  <p className="text-sm text-contrast/70">
                     Choose your aesthetic direction
                   </p>
                 </div>
-                <div className="px-3 py-1 glass-card rounded-full">
+                <div className="px-2 py-1 glass-card rounded-full">
                   <span className="text-xs font-bold text-[#10B981]">02</span>
                 </div>
               </div>
 
               {/* Style Reference */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-sm font-bold text-contrast uppercase tracking-wider">
+                  <label className="block text-xs font-bold text-contrast uppercase tracking-wider">
                     Style Reference
                   </label>
                   {stylePreview && (
-                    <div className="flex items-center gap-2 px-3 py-1 glass-card rounded-full">
-                      <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                    <div className="flex items-center gap-2 px-2 py-1 glass-card rounded-full">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
                       <span className="text-xs font-bold text-[#10B981]">Ready</span>
                     </div>
                   )}
@@ -238,11 +238,11 @@ export default function SetupPage({
                   title=""
                   preview={stylePreview}
                   onFileChange={onStyleUpload}
-                  icon={<Palette className="w-10 h-10 text-white" />}
+                  icon={<Palette className="w-8 h-8 text-white" />}
                   aspectClass="aspect-video"
                 />
-                <div className="glass-card p-4">
-                  <p className="text-sm text-contrast/70 leading-relaxed">
+                <div className="glass-card p-3">
+                  <p className="text-xs text-contrast/70 leading-relaxed">
                     AI extracts lighting, color grade, and mood while preserving your character
                   </p>
                 </div>
@@ -251,8 +251,8 @@ export default function SetupPage({
           </div>
 
           {/* Action Bar */}
-          <div className="max-w-7xl mx-auto mt-12 animate-fadeIn" style={{animationDelay: '0.2s'}}>
-            <div className="glass-card-strong p-6 lg:p-8">
+          <div className="max-w-6xl mx-auto mt-8 animate-fadeIn" style={{animationDelay: '0.2s'}}>
+            <div className="glass-card-strong p-5">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                   {canProceed ? (
