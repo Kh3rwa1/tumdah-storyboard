@@ -37,15 +37,10 @@ export default function ImageDropzone({
           <>
             <img src={preview} alt="Preview" className="absolute inset-0 w-full h-full object-cover rounded-3xl" />
             {!disabled && (
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all rounded-3xl"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(161, 196, 253, 0.85), rgba(194, 233, 251, 0.85))',
-                  backdropFilter: 'blur(10px)'
-                }}
-              >
-                <div className="text-center glass-card-strong p-8">
-                  <Upload className="w-12 h-12 text-[#1a1a2e] mx-auto mb-3" />
-                  <p className="text-[#1a1a2e] text-sm font-bold">Change Image</p>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all rounded-3xl bg-[#10B981]/90 backdrop-blur-sm">
+                <div className="text-center">
+                  <Upload className="w-12 h-12 text-white mx-auto mb-3" />
+                  <p className="text-white text-sm font-bold">Change Image</p>
                 </div>
               </div>
             )}
