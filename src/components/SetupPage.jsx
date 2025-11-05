@@ -1,4 +1,4 @@
-import { User, Palette, Library, Save, ChevronsUpDown, ArrowRight, ImageUp, Sparkles, Zap } from 'lucide-react';
+import { User, Palette, Library, Save, ChevronsUpDown, ArrowRight, Sparkles, Zap } from 'lucide-react';
 import { useState } from 'react';
 import ImageDropzone from './ImageDropzone';
 
@@ -11,8 +11,6 @@ export default function SetupPage({
   selectedActorId,
   stylePreview,
   onStyleUpload,
-  overridePreview,
-  onOverrideChange,
   onNext,
   onBack
 }) {
@@ -30,9 +28,7 @@ export default function SetupPage({
     onSelectCharacter(actorId);
   };
 
-  const canProceed = stylePreview || overridePreview;
-  const isComponentModeDisabled = !!overridePreview;
-  const isOverrideModeDisabled = !!stylePreview;
+  const canProceed = stylePreview;
 
   return (
     <div className="min-h-screen relative">
@@ -225,15 +221,18 @@ export default function SetupPage({
                 </div>
               </div>
 
-              {/* Component Mode */}
-              <div className={`space-y-3 transition-all duration-300 ${isComponentModeDisabled ? 'opacity-40 pointer-events-none' : ''}`}>
+              {/* Style Reference */}
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="block text-sm font-bold text-contrast uppercase tracking-wider">
                     Style Reference
                   </label>
-                  <div className="px-3 py-1 glass-button rounded-full">
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">Component</span>
-                  </div>
+                  {stylePreview && (
+                    <div className="flex items-center gap-2 px-3 py-1 glass-card rounded-full">
+                      <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></div>
+                      <span className="text-xs font-bold text-[#10B981]">Ready</span>
+                    </div>
+                  )}
                 </div>
                 <ImageDropzone
                   title=""
@@ -241,47 +240,10 @@ export default function SetupPage({
                   onFileChange={onStyleUpload}
                   icon={<Palette className="w-10 h-10 text-white" />}
                   aspectClass="aspect-video"
-                  disabled={isComponentModeDisabled}
                 />
                 <div className="glass-card p-4">
                   <p className="text-sm text-contrast/70 leading-relaxed">
                     AI extracts lighting, color grade, and mood while preserving your character
-                  </p>
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div className="relative flex items-center py-2">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                <div className="px-6">
-                  <div className="px-4 py-2 glass-card rounded-full">
-                    <span className="text-xs font-bold text-contrast uppercase tracking-wider">Or</span>
-                  </div>
-                </div>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-              </div>
-
-              {/* Override Mode */}
-              <div className={`space-y-3 transition-all duration-300 ${!isComponentModeDisabled ? 'opacity-40 pointer-events-none' : ''}`}>
-                <div className="flex items-center justify-between">
-                  <label className="block text-sm font-bold text-contrast uppercase tracking-wider">
-                    Complete Override
-                  </label>
-                  <div className="px-3 py-1 glass-button rounded-full">
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">Override</span>
-                  </div>
-                </div>
-                <ImageDropzone
-                  title=""
-                  preview={overridePreview}
-                  onFileChange={onOverrideChange}
-                  icon={<ImageUp className="w-10 h-10 text-white" />}
-                  aspectClass="aspect-video"
-                  disabled={isOverrideModeDisabled}
-                />
-                <div className="glass-card p-4">
-                  <p className="text-sm text-contrast/70 leading-relaxed">
-                    Uses a single image for both subject and environment
                   </p>
                 </div>
               </div>

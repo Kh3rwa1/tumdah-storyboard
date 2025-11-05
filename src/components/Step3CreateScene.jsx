@@ -1,4 +1,4 @@
-import { Wand2, Users, Image as ImageIcon, User, Film, Loader2, X, ArrowLeft, Check } from 'lucide-react';
+import { Wand2, Users, Image as ImageIcon, User, Film, Loader2, X, ArrowLeft, Check, ImageUp } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import ImageDropzone from './ImageDropzone';
 
@@ -10,6 +10,9 @@ export default function Step3CreateScene({
   characterPreview,
   stylePreview,
   overrideFile,
+  overridePreview,
+  onOverrideChange,
+  onClearOverride,
   savedCharacters,
   onBack
 }) {
@@ -216,6 +219,41 @@ export default function Step3CreateScene({
                   className="w-full glass-input p-4 min-h-[100px] placeholder-[#1a1a2e]/50 resize-none font-medium"
                   disabled={isLoading}
                 />
+              </div>
+
+              {/* Complete Override */}
+              <div className="glass-card p-6 space-y-4 border-2 border-[#10B981]/20">
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-bold text-contrast uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                      <ImageUp className="w-5 h-5 text-[#10B981]" />
+                      Complete Override (Optional)
+                    </div>
+                  </label>
+                  {overridePreview && (
+                    <button
+                      type="button"
+                      onClick={onClearOverride}
+                      className="px-3 py-1 glass-card hover:bg-red-500/20 text-red-500 rounded-full text-xs font-bold transition-all"
+                      disabled={isLoading}
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <ImageDropzone
+                  title=""
+                  preview={overridePreview}
+                  onFileChange={onOverrideChange}
+                  icon={<ImageUp className="w-10 h-10 text-white" />}
+                  aspectClass="aspect-video"
+                  disabled={isLoading}
+                />
+                <div className="glass-card p-3">
+                  <p className="text-xs text-contrast/70 leading-relaxed">
+                    Uses a single image for both subject and environment. Overrides character and style from setup.
+                  </p>
+                </div>
               </div>
 
               {/* Additional Characters */}

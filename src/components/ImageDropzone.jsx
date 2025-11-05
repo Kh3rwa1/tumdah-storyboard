@@ -20,11 +20,11 @@ export default function ImageDropzone({
     }
   };
 
-  const id = title.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  const id = `dropzone-${(title || 'upload').toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
     <div className="w-full">
-      <label className="block text-sm font-bold text-contrast mb-3">{title}</label>
+      {title && <label className="block text-sm font-bold text-contrast mb-3">{title}</label>}
       <label
         htmlFor={disabled ? undefined : id}
         className={`relative flex flex-col items-center justify-center w-full ${aspectClass} transition-all ${

@@ -227,8 +227,6 @@ export default function App() {
           selectedActorId={selectedActorId}
           stylePreview={style.preview}
           onStyleUpload={handleStyleUpload}
-          overridePreview={override.preview}
-          onOverrideChange={handleOverrideChange}
           onNext={() => setCurrentStep(STEPS.SCENE)}
           onBack={() => setCurrentStep(STEPS.LANDING)}
         />
@@ -237,6 +235,9 @@ export default function App() {
       {currentStep === STEPS.SCENE && (
         <Step3CreateScene
           onSubmit={handleGenerate}
+          overridePreview={override.preview}
+          onOverrideChange={handleOverrideChange}
+          onClearOverride={handleClearOverride}
           isLoading={isLoading}
           currentGeneratingText={currentGeneratingText}
           error={error}
