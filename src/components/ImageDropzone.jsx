@@ -24,36 +24,41 @@ export default function ImageDropzone({
 
   return (
     <div className="w-full">
-      <label className="block text-sm font-semibold text-[#6b5b7b] mb-3">{title}</label>
+      <label className="block text-sm font-bold text-contrast mb-3">{title}</label>
       <label
         htmlFor={disabled ? undefined : id}
-        className={`relative flex flex-col items-center justify-center w-full ${aspectClass} rounded-3xl transition-all ${
+        className={`relative flex flex-col items-center justify-center w-full ${aspectClass} transition-all ${
           disabled
-            ? 'opacity-40 cursor-not-allowed clay-element-pressed bg-gradient-to-br from-[#e8d8f0] to-[#f0e0f8]'
-            : 'cursor-pointer group clay-element bg-gradient-to-br from-[#f8f4fc] to-[#f0e8f8] hover:shadow-lg'
+            ? 'opacity-40 cursor-not-allowed frosted-glass'
+            : 'cursor-pointer group glass-card hover:scale-105'
         }`}
       >
         {preview && !multiple ? (
           <>
             <img src={preview} alt="Preview" className="absolute inset-0 w-full h-full object-cover rounded-3xl" />
             {!disabled && (
-              <div className="absolute inset-0 bg-gradient-to-br from-[#d4c5e8]/90 to-[#b8d9e8]/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all rounded-3xl">
-                <div className="text-center clay-element bg-white/50 p-6 rounded-2xl">
-                  <Upload className="w-10 h-10 text-[#6b5b7b] mx-auto mb-2" />
-                  <p className="text-[#5a4a6a] text-sm font-bold">Change Image</p>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all rounded-3xl"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(161, 196, 253, 0.85), rgba(194, 233, 251, 0.85))',
+                  backdropFilter: 'blur(10px)'
+                }}
+              >
+                <div className="text-center glass-card-strong p-8">
+                  <Upload className="w-12 h-12 text-[#1a1a2e] mx-auto mb-3" />
+                  <p className="text-[#1a1a2e] text-sm font-bold">Change Image</p>
                 </div>
               </div>
             )}
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center text-[#7a6a8a] p-8">
-            <div className="p-5 clay-element bg-gradient-to-br from-[#d4c5e8] to-[#b8d9e8] rounded-3xl mb-4 group-hover:scale-105 transition-transform">
+          <div className="flex flex-col items-center justify-center text-contrast p-8">
+            <div className="p-6 glass-button mb-5 group-hover:scale-110 transition-transform">
               {icon}
             </div>
-            <p className="text-sm font-bold text-center text-[#5a4a6a] mb-1">
+            <p className="text-sm font-bold text-center mb-2">
               {multiple ? "Click or drag files here" : "Click or drag to upload"}
             </p>
-            <p className="text-xs text-center text-[#8a7a9a]">PNG, JPG, or WEBP</p>
+            <p className="text-xs text-center opacity-70">PNG, JPG, or WEBP</p>
           </div>
         )}
         {!disabled && (

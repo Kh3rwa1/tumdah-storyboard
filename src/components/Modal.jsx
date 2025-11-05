@@ -5,20 +5,25 @@ export default function Modal({ src, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn"
+      style={{
+        background: 'linear-gradient(135deg, rgba(161, 196, 253, 0.6), rgba(194, 233, 251, 0.6))',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)'
+      }}
       onClick={onClose}
     >
       <div
-        className="relative max-w-7xl max-h-[95vh] bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden shadow-2xl animate-slideUp"
+        className="relative max-w-7xl max-h-[95vh] glass-card-strong overflow-hidden animate-slideUp"
         onClick={(e) => e.stopPropagation()}
       >
-        <img src={src} alt="Enlarged shot" className="block w-full h-auto object-contain max-h-[90vh]" />
+        <img src={src} alt="Enlarged shot" className="block w-full h-auto object-contain max-h-[90vh] rounded-3xl" />
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white border border-white/20 transition-all hover:scale-110"
+          className="absolute top-6 right-6 p-4 glass-button transition-all hover:scale-110"
           aria-label="Close modal"
         >
-          <X className="w-6 h-6" />
+          <X className="w-6 h-6 text-[#1a1a2e]" />
         </button>
       </div>
     </div>
