@@ -1,10 +1,21 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useAuth } from './contexts/AuthContext';
+import AuthPage from './components/AuthPage';
 import LandingPage from './components/LandingPage';
 import SetupPage from './components/SetupPage';
 import Step3CreateScene from './components/Step3CreateScene';
 import StoryboardView from './components/StoryboardView';
 import Modal from './components/Modal';
-import { callGeminiAPI, fileToBase64, imageToApiPart, SHOT_TYPES, SKELETON_STATE } from './utils/api';
+import { fileToBase64 } from './utils/api';
+import {
+  getSavedCharacters,
+  saveCharacter,
+  uploadImage,
+  callGenerateSceneAPI,
+  saveGeneratedScene,
+  getGeneratedScenes
+} from './lib/supabase';
+import { Loader2 } from 'lucide-react';
 
 const STEPS = {
   LANDING: 'landing',
@@ -14,6 +25,7 @@ const STEPS = {
 };
 
 export default function App() {
+  const { user, loading: authLoading } = useAuth();
   const [currentStep, setCurrentStep] = useState(STEPS.LANDING);
   const [character, setCharacter] = useState({ file: null, preview: null });
   const [style, setStyle] = useState({ file: null, preview: null });
@@ -25,6 +37,41 @@ export default function App() {
   const [currentGeneratingText, setCurrentGeneratingText] = useState("");
   const [error, setError] = useState(null);
   const [viewingImage, setViewingImage] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      loadSavedCharacters();
+      loadGeneratedScenes();
+    }
+  }, [user]);
+
+  const loadSavedCharacters = async () => {
+    try {
+      const characters = await getSavedCharacters(user.id);
+      setSavedCharacters(characters.map(char => ({
+        id: char.id,
+        name: char.name,
+        preview: char.image_url,
+        file: null
+      })));
+    } catch (err) {
+      console.error('Error loading characters:', err);
+    }
+  };
+
+  const loadGeneratedScenes = async () => {
+    try {
+      const generatedScenes = await getGeneratedScenes(user.id);
+      setScenes(generatedScenes.map(scene => ({
+        id: scene.id,
+        imageUrl: scene.image_url,
+        shotType: scene.shot_type,
+        actionPrompt: scene.action_prompt
+      })));
+    } catch (err) {
+      console.error('Error loading scenes:', err);
+    }
+  };
 
   const handleCharacterUpload = async (file) => {
     if (file) {
@@ -55,24 +102,32 @@ export default function App() {
     setOverride({ file: null, preview: null });
   };
 
-  const handleSaveCharacter = (name) => {
+  const handleSaveCharacter = async (name) => {
     if (!character.file || !character.preview || !name) return;
 
     if (savedCharacters.some(actor => actor.name === name)) {
       setError("An actor with this name already exists.");
       return;
     }
-    setError(null);
 
-    const newActor = {
-      id: crypto.randomUUID(),
-      name: name,
-      file: character.file,
-      preview: character.preview
-    };
+    try {
+      const imageUrl = await uploadImage(character.file, 'characters', user.id);
+      const savedChar = await saveCharacter(name, imageUrl, user.id);
 
-    setSavedCharacters(prev => [...prev, newActor]);
-    setSelectedActorId(newActor.id);
+      const newActor = {
+        id: savedChar.id,
+        name: savedChar.name,
+        preview: savedChar.image_url,
+        file: null
+      };
+
+      setSavedCharacters(prev => [...prev, newActor]);
+      setSelectedActorId(newActor.id);
+      setError(null);
+    } catch (err) {
+      console.error('Error saving character:', err);
+      setError('Failed to save character. Please try again.');
+    }
   };
 
   const handleSelectCharacter = (actorId) => {
@@ -99,102 +154,67 @@ export default function App() {
   ) => {
     setIsLoading(true);
     setError(null);
-    setCurrentGeneratingText("Starting...");
-
-    const newSceneId = crypto.randomUUID();
-    let initialScene;
-    let isOverrideMode = false;
+    setCurrentGeneratingText("Analyzing your inputs...");
 
     try {
-      let activeBasePart, activeStylePart;
-      let activeBasePreview, activeStylePreview;
-      let additionalCharacterParts = [], additionalCharacterPreviews = [];
-      let elementParts = [], elementPreviews = [];
+      const characterImage = character.preview;
+      const styleImage = style.preview;
+      const overrideImage = override.preview;
 
-      if (override.file) {
-        isOverrideMode = true;
-        activeBasePart = await imageToApiPart(override.file);
-        activeStylePart = activeBasePart;
-        activeBasePreview = override.preview;
-        activeStylePreview = "https://placehold.co/256x256/333/FFF?text=NO-STYLE";
-      } else {
-        isOverrideMode = false;
+      const additionalCharacters = await Promise.all(
+        additionalCharacterFiles.map(file => fileToBase64(file))
+      );
 
-        if (!style.file) {
-          throw new Error("Style image is required for Component Mode.");
-        }
-        activeStylePart = await imageToApiPart(style.file);
-        activeStylePreview = style.preview;
+      const elements = await Promise.all(
+        elementFiles.map(file => fileToBase64(file))
+      );
 
-        if (character.file) {
-          activeBasePart = await imageToApiPart(character.file);
-          activeBasePreview = character.preview;
-        } else {
-          activeBasePart = null;
-          activeBasePreview = "https://placehold.co/256x256/333/FFF?text=STYLE-ONLY";
-        }
+      setCurrentGeneratingText("Generating your scene with AI...");
 
-        additionalCharacterParts = await Promise.all(additionalCharacterFiles.map(imageToApiPart));
-        additionalCharacterPreviews = await Promise.all(additionalCharacterFiles.map(fileToBase64));
+      const result = await callGenerateSceneAPI({
+        actionPrompt,
+        backgroundPrompt,
+        characterImage,
+        styleImage,
+        overrideImage,
+        additionalCharacters,
+        elements,
+        isSubjectRemoved,
+        isSceneLocked,
+        aspectRatio
+      });
 
-        elementParts = await Promise.all(elementFiles.map(imageToApiPart));
-        elementPreviews = await Promise.all(elementFiles.map(fileToBase64));
-      }
-
-      initialScene = {
-        id: newSceneId,
-        actionPrompt: actionPrompt,
-        backgroundPrompt: backgroundPrompt,
-        generatedShots: SKELETON_STATE,
-        isNew: true,
-        styleRefPreview: activeStylePreview,
-        baseRefPreview: activeBasePreview,
-        additionalCharacterPreviews: additionalCharacterPreviews,
-        elementRefPreviews: elementPreviews,
-        isSubjectRemoved: isSubjectRemoved,
-        isOverrideMode: isOverrideMode,
-        isSceneLocked: isSceneLocked,
-        aspectRatio: aspectRatio
+      const sceneData = {
+        imageUrl: result.imageGenerationPrompt,
+        shotType: result.shotType || 'Generated Scene',
+        actionPrompt,
+        backgroundPrompt,
+        aspectRatio,
+        isSubjectRemoved,
+        isSceneLocked
       };
 
-      setScenes(prevScenes => [...prevScenes, initialScene]);
+      const savedScene = await saveGeneratedScene(sceneData, user.id);
 
-      const generatedShots = [];
-      for (let i = 0; i < SHOT_TYPES.length; i++) {
-        setCurrentGeneratingText(`Generating ${i + 1}/${SHOT_TYPES.length}: ${SHOT_TYPES[i]}...`);
-        const shotSrc = await callGeminiAPI(
-          actionPrompt,
-          backgroundPrompt,
-          activeBasePart,
-          activeStylePart,
-          SHOT_TYPES[i],
-          isSubjectRemoved,
-          additionalCharacterParts,
-          elementParts,
-          isOverrideMode,
-          isSceneLocked,
-          aspectRatio
-        );
-        generatedShots.push(shotSrc);
-      }
+      const newScene = {
+        id: savedScene.id,
+        imageUrl: savedScene.image_url,
+        shotType: savedScene.shot_type,
+        actionPrompt: savedScene.action_prompt,
+        imageDescription: result.imageDescription
+      };
 
-      setScenes(prevScenes => prevScenes.map(scene =>
-        scene.id === newSceneId
-          ? { ...scene, generatedShots: generatedShots }
-          : scene
-      ));
-
+      setScenes(prev => [...prev, newScene]);
       setCurrentStep(STEPS.STORYBOARD);
 
     } catch (err) {
-      console.error("Generation failed:", err);
-      setError(err.message || "An unknown error occurred during generation.");
-      setScenes(prevScenes => prevScenes.filter(s => s.id !== newSceneId));
+      console.error('Generation error:', err);
+      setError(err.message || "Failed to generate scene. Please try again.");
     } finally {
       setIsLoading(false);
       setCurrentGeneratingText("");
     }
-  }, [character, style, override]);
+  }, [character.preview, style.preview, override.preview, user]);
 
   const handleAddNewScene = () => {
     setCurrentStep(STEPS.SCENE);
@@ -209,6 +229,21 @@ export default function App() {
     setScenes([]);
     setError(null);
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-12 h-12 text-[#10B981] animate-spin" />
+          <p className="text-contrast/70 font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage />;
+  }
 
   return (
     <>
