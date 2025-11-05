@@ -214,38 +214,6 @@ export default function App() {
 
   return (
     <>
-      <style>{`
-        .neo-shadow {
-          box-shadow: 4px 4px 0px #000;
-        }
-        .neo-shadow-disabled {
-          box-shadow: none;
-        }
-        .neo-button {
-          padding: 0.75rem 1.5rem;
-          font-weight: 700;
-          color: black;
-          border: 4px solid black;
-          box-shadow: 4px 4px 0px #000;
-          transition: all 0.1s ease-in-out;
-        }
-        .neo-button:hover:not(:disabled) {
-          transform: translate(2px, 2px);
-          box-shadow: 2px 2px 0px #000;
-        }
-        .neo-button:active:not(:disabled) {
-          transform: translate(4px, 4px);
-          box-shadow: 0px 0px 0px #000;
-        }
-        .neo-button:disabled {
-          transform: none;
-          box-shadow: none;
-        }
-        .hover\\:neo-press-sm:hover:not(:disabled) {
-          transform: translate(2px, 2px);
-          box-shadow: 2px 2px 0px #000;
-        }
-      `}</style>
 
       {currentStep === STEPS.LANDING && (
         <LandingPage onStart={() => setCurrentStep(STEPS.CHARACTER)} />

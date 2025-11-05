@@ -3,7 +3,7 @@ import { useRef, useEffect } from 'react';
 
 function ShotCardSkeleton({ ratioClass = "aspect-video" }) {
   return (
-    <div className={`${ratioClass} bg-gray-300 animate-pulse border-4 border-black`}></div>
+    <div className={`${ratioClass} bg-white/5 animate-pulse border border-white/10 rounded-xl`}></div>
   );
 }
 
@@ -13,16 +13,16 @@ function ShotCard({ src, sceneNumber, shotNumber, onImageClick, ratioClass = "as
   }
 
   return (
-    <div className={`relative group ${ratioClass} bg-black border-4 border-black overflow-hidden shadow-lg`}>
+    <div className={`relative group ${ratioClass} bg-black border border-white/20 overflow-hidden rounded-xl hover-lift`}>
       <img
         src={src}
         alt={`Scene ${sceneNumber} Shot ${shotNumber}`}
         className="w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all backdrop-blur-sm flex items-center justify-center gap-3">
         <button
           onClick={() => onImageClick(src)}
-          className="p-2 bg-yellow-400 rounded-full text-black border-4 border-black neo-shadow hover:neo-press-sm"
+          className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white border border-white/20 transition-all hover:scale-110"
           aria-label="View shot"
         >
           <Expand className="w-5 h-5" />
@@ -31,7 +31,7 @@ function ShotCard({ src, sceneNumber, shotNumber, onImageClick, ratioClass = "as
           href={src}
           download={`scene-${sceneNumber}-shot-${shotNumber}.png`}
           onClick={(e) => e.stopPropagation()}
-          className="p-2 bg-yellow-400 rounded-full text-black border-4 border-black neo-shadow hover:neo-press-sm"
+          className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white border border-white/20 transition-all hover:scale-110"
           aria-label="Download shot"
         >
           <Download className="w-5 h-5" />
@@ -54,51 +54,59 @@ function SceneCard({ scene, sceneNumber, onImageClick, onAddNewScene }) {
   const ratioClass = scene.aspectRatio === "9:16 portrait" ? "aspect-[9/16]" : "aspect-video";
 
   return (
-    <section ref={sceneRef} className="bg-white border-4 border-black p-4 sm:p-6 neo-shadow">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-5 pb-5 border-b-4 border-black">
-        <div>
-          <h3 className="text-2xl font-bold text-black">Scene {sceneNumber}</h3>
-          <p className="text-gray-700 italic mt-1">Action: "{scene.actionPrompt}"</p>
+    <section ref={sceneRef} className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-6 lg:p-8 shadow-2xl animate-fadeIn hover-lift">
+      <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 mb-6 pb-6 border-b border-white/10">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="px-3 py-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
+              <h3 className="text-lg font-bold text-white">Scene {sceneNumber}</h3>
+            </div>
+          </div>
+          <p className="text-gray-300 mb-2">
+            <span className="text-gray-500 text-sm font-medium">Action:</span> {scene.actionPrompt}
+          </p>
           {scene.backgroundPrompt && (
-            <p className="text-gray-700 italic mt-1 text-sm">Setting: "{scene.backgroundPrompt}"</p>
+            <p className="text-gray-300 text-sm">
+              <span className="text-gray-500 text-sm font-medium">Setting:</span> {scene.backgroundPrompt}
+            </p>
           )}
-          <div className="flex flex-wrap gap-2 items-center mt-2">
+          <div className="flex flex-wrap gap-2 mt-3">
             {scene.isSubjectRemoved && (
-              <span className="inline-block bg-red-400 border-4 border-black px-3 py-1 text-xs font-bold neo-shadow">
-                MAIN SUBJECT REMOVED
+              <span className="inline-flex items-center px-3 py-1 bg-red-500/20 border border-red-500/30 rounded-lg text-xs font-medium text-red-400">
+                Subject Removed
               </span>
             )}
             {scene.isOverrideMode && (
-              <span className="inline-block bg-green-400 border-4 border-black px-3 py-1 text-xs font-bold neo-shadow">
-                OVERRIDE MODE
+              <span className="inline-flex items-center px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-lg text-xs font-medium text-green-400">
+                Override Mode
               </span>
             )}
             {scene.isSceneLocked && (
-              <span className="inline-block bg-blue-400 border-4 border-black px-3 py-1 text-xs font-bold neo-shadow">
-                SCENE LOCKED
+              <span className="inline-flex items-center px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-lg text-xs font-medium text-blue-400">
+                Scene Locked
               </span>
             )}
           </div>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           {scene.baseRefPreview && !scene.baseRefPreview.includes("STYLE-ONLY") && (
-            <div className="text-left">
-              <span className="block text-xs font-bold text-black mb-1">
+            <div className="text-center">
+              <span className="block text-xs font-medium text-gray-400 mb-2">
                 {scene.isOverrideMode ? "Source" : "Character"}
               </span>
-              <img src={scene.baseRefPreview} alt="Character" className="w-14 h-14 object-cover border-4 border-black" />
+              <img src={scene.baseRefPreview} alt="Character" className="w-16 h-16 object-cover border-2 border-white/20 rounded-lg" />
             </div>
           )}
           {scene.styleRefPreview && !scene.styleRefPreview.includes("NO-STYLE") && (
-            <div className="text-left">
-              <span className="block text-xs font-bold text-black mb-1">Style</span>
-              <img src={scene.styleRefPreview} alt="Style" className="w-14 h-14 object-cover border-4 border-black" />
+            <div className="text-center">
+              <span className="block text-xs font-medium text-gray-400 mb-2">Style</span>
+              <img src={scene.styleRefPreview} alt="Style" className="w-16 h-16 object-cover border-2 border-white/20 rounded-lg" />
             </div>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {scene.generatedShots.map((src, index) => (
           <ShotCard
             key={index}
@@ -111,12 +119,12 @@ function SceneCard({ scene, sceneNumber, onImageClick, onAddNewScene }) {
         ))}
       </div>
 
-      <div className="mt-6 flex justify-center">
+      <div className="mt-8 flex justify-center">
         <button
           onClick={onAddNewScene}
-          className="neo-button bg-blue-400 flex items-center gap-2"
+          className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium transition-all hover:scale-105 flex items-center gap-2"
         >
-          <PlusCircle className="w-4 h-4" />
+          <PlusCircle className="w-5 h-5" />
           Add Another Scene
         </button>
       </div>
@@ -126,45 +134,55 @@ function SceneCard({ scene, sceneNumber, onImageClick, onAddNewScene }) {
 
 export default function StoryboardView({ scenes, onImageClick, onAddNewScene, onBackToStart }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-yellow-100 to-blue-200 p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="bg-yellow-400 border-4 border-black p-3 neo-shadow">
-              <Film className="w-8 h-8 text-black" />
-            </div>
-            <h1 className="text-3xl font-bold text-black">Your Storyboard</h1>
-          </div>
-          <button
-            onClick={onBackToStart}
-            className="neo-button bg-gray-300 flex items-center gap-2"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Start Over
-          </button>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+      </div>
 
-        {scenes.length === 0 ? (
-          <div className="bg-white border-4 border-black neo-shadow p-12 text-center">
-            <LayoutGrid className="w-24 h-24 mb-6 mx-auto text-gray-400" />
-            <h3 className="text-2xl font-bold">Your Storyboard is Empty</h3>
-            <p className="mt-2 max-w-sm mx-auto text-gray-600">
-              Complete the steps to generate your first scene.
-            </p>
+      <div className="relative z-10 min-h-screen p-4 sm:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 animate-fadeIn">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl border border-white/10">
+                <Film className="w-8 h-8 text-purple-400" />
+              </div>
+              <div>
+                <h1 className="text-3xl lg:text-4xl font-bold text-white">Your Storyboard</h1>
+                <p className="text-gray-400 mt-1">Professional 9-shot scenes for your project</p>
+              </div>
+            </div>
+            <button
+              onClick={onBackToStart}
+              className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium transition-all flex items-center gap-2"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Start Over
+            </button>
           </div>
-        ) : (
-          <div className="space-y-8">
-            {scenes.map((scene, index) => (
-              <SceneCard
-                key={scene.id}
-                scene={scene}
-                sceneNumber={index + 1}
-                onImageClick={onImageClick}
-                onAddNewScene={onAddNewScene}
-              />
-            ))}
-          </div>
-        )}
+
+          {scenes.length === 0 ? (
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-12 lg:p-20 text-center animate-fadeIn">
+              <LayoutGrid className="w-24 h-24 mb-6 mx-auto text-gray-600" />
+              <h3 className="text-2xl font-bold text-white mb-3">Your Storyboard is Empty</h3>
+              <p className="text-gray-400 max-w-md mx-auto">
+                Complete the steps to generate your first scene with 9 cinematic shots.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-8">
+              {scenes.map((scene, index) => (
+                <SceneCard
+                  key={scene.id}
+                  scene={scene}
+                  sceneNumber={index + 1}
+                  onImageClick={onImageClick}
+                  onAddNewScene={onAddNewScene}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

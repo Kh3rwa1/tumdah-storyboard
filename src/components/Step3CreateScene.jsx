@@ -1,4 +1,4 @@
-import { Wand2, Users, ImageIcon as ImageIconLucide, User, ToggleLeft, ToggleRight, Lock, ArrowLeft, Film, Loader2, X } from 'lucide-react';
+import { Wand2, Users, Image as ImageIcon, User, Film, Loader2, X, ArrowLeft, Check } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import ImageDropzone from './ImageDropzone';
 
@@ -141,216 +141,221 @@ export default function Step3CreateScene({
   const allAdditionalCharacters = isAutoSelectedAddl ? autoSelectedAddlChars : additionalCharacters;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-yellow-100 to-blue-200 flex items-center justify-center p-4">
-      <div className="max-w-3xl w-full">
-        <div className="bg-white border-4 border-black neo-shadow p-8">
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-yellow-400 border-4 border-black p-3 neo-shadow">
-                <Wand2 className="w-6 h-6 text-black" />
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+        <div className="max-w-4xl w-full">
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl animate-fadeIn">
+            <div className="mb-10">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-white/10">
+                  <Wand2 className="w-7 h-7 text-blue-400" />
+                </div>
+                <div>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white">Step 3</h2>
+                  <p className="text-xl text-gray-300 mt-1">Create Scene</p>
+                  <p className="text-sm text-gray-500 mt-1">Define your action and generate 9 cinematic shots</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-3xl font-bold text-black">Step 3: Create Scene</h2>
-                <p className="text-gray-600 text-sm">Define your action and generate shots</p>
-              </div>
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="action-prompt" className="block text-sm font-bold text-black">
-                Subject(s) Action Prompt
-              </label>
-              <textarea
-                id="action-prompt"
-                rows="3"
-                value={actionPrompt}
-                onChange={(e) => setActionPrompt(e.target.value)}
-                placeholder="e.g., Drake singing, Bully and Guru Gomke fighting..."
-                className="w-full p-3 bg-white border-4 border-black neo-shadow placeholder-gray-500 focus:outline-none focus:bg-yellow-100"
-                ref={inputRef}
-              />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="background-prompt" className="block text-sm font-bold text-black">
-                Scene Setting / Background Prompt (Optional)
-              </label>
-              <textarea
-                id="background-prompt"
-                rows="3"
-                value={backgroundPrompt}
-                onChange={(e) => setBackgroundPrompt(e.target.value)}
-                placeholder="e.g., A bustling city street at night, rainy forest..."
-                className="w-full p-3 bg-white border-4 border-black neo-shadow placeholder-gray-500 focus:outline-none focus:bg-yellow-100"
-              />
-            </div>
-
-            <div className={`relative ${isComponentModeDisabled ? 'opacity-50' : ''}`}>
-              <ImageDropzone
-                title={isAutoSelectedAddl ? `Additional Characters (Auto: ${allAdditionalCharacters.length})` : "Additional Characters (Optional)"}
-                onFileChange={handleAdditionalCharacterChange}
-                icon={<Users className="w-6 h-6" />}
-                aspectClass="aspect-[4/1]"
-                multiple={true}
-                disabled={isComponentModeDisabled}
-              />
-              {allAdditionalCharacters.length > 0 && (
-                <button
-                  type="button"
-                  onClick={clearAdditionalCharacters}
-                  className="absolute top-9 right-2 p-1 bg-black/80 rounded-full text-white hover:bg-black"
-                  aria-label="Clear all characters"
-                  disabled={isComponentModeDisabled}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-            {allAdditionalCharacters.length > 0 && !isComponentModeDisabled && (
-              <div className="flex gap-2 overflow-x-auto p-2 bg-gray-100 border-2 border-black">
-                {allAdditionalCharacters.map((item) => (
-                  <img key={item.id} src={item.preview} alt={item.name || 'Char'} title={item.name || 'Char'} className="w-16 h-16 object-cover border-2 border-black flex-shrink-0" />
-                ))}
-              </div>
-            )}
-
-            <div className={`relative ${isComponentModeDisabled ? 'opacity-50' : ''}`}>
-              <ImageDropzone
-                title="Additional Reference Elements (Optional)"
-                onFileChange={handleElementChange}
-                icon={<ImageIconLucide className="w-6 h-6" />}
-                aspectClass="aspect-[4/1]"
-                multiple={true}
-                disabled={isComponentModeDisabled}
-              />
-              {elements.length > 0 && (
-                <button
-                  type="button"
-                  onClick={clearElements}
-                  className="absolute top-9 right-2 p-1 bg-black/80 rounded-full text-white hover:bg-black"
-                  aria-label="Clear all elements"
-                  disabled={isComponentModeDisabled}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-            {elements.length > 0 && !isComponentModeDisabled && (
-              <div className="flex gap-2 overflow-x-auto p-2 bg-gray-100 border-2 border-black">
-                {elements.map((item) => (
-                  <img key={item.id} src={item.preview} alt="Element" className="w-16 h-16 object-cover border-2 border-black flex-shrink-0" />
-                ))}
-              </div>
-            )}
-
-            <div className="space-y-4 pt-4 border-t-4 border-black">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-black flex items-center gap-2">
-                  <Film className="w-4 h-4" /> Aspect Ratio
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="space-y-3">
+                <label htmlFor="action-prompt" className="block text-sm font-medium text-gray-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Wand2 className="w-4 h-4 text-blue-400" />
+                    Subject(s) Action Prompt
+                  </div>
                 </label>
-                <div className="flex border-4 border-black neo-shadow overflow-hidden">
+                <textarea
+                  id="action-prompt"
+                  rows="3"
+                  value={actionPrompt}
+                  onChange={(e) => setActionPrompt(e.target.value)}
+                  placeholder="e.g., Drake singing, Bully and Guru Gomke fighting..."
+                  className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all resize-none"
+                  ref={inputRef}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <label htmlFor="background-prompt" className="block text-sm font-medium text-gray-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ImageIcon className="w-4 h-4 text-blue-400" />
+                    Scene Setting / Background (Optional)
+                  </div>
+                </label>
+                <textarea
+                  id="background-prompt"
+                  rows="3"
+                  value={backgroundPrompt}
+                  onChange={(e) => setBackgroundPrompt(e.target.value)}
+                  placeholder="e.g., A bustling city street at night, rainy forest..."
+                  className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all resize-none"
+                />
+              </div>
+
+              <div className={`relative ${isComponentModeDisabled ? 'opacity-30' : ''}`}>
+                <ImageDropzone
+                  title={isAutoSelectedAddl ? `Additional Characters (Auto: ${allAdditionalCharacters.length})` : "Additional Characters (Optional)"}
+                  onFileChange={handleAdditionalCharacterChange}
+                  icon={<Users className="w-6 h-6" />}
+                  aspectClass="aspect-[4/1]"
+                  multiple={true}
+                  disabled={isComponentModeDisabled}
+                />
+                {allAdditionalCharacters.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => setAspectRatio("16:9 landscape")}
-                    className={`p-2 px-4 font-bold ${aspectRatio.includes("landscape") ? 'bg-yellow-400' : 'bg-white'} hover:bg-yellow-200`}
+                    onClick={clearAdditionalCharacters}
+                    className="absolute top-12 right-2 p-2 bg-red-500/80 hover:bg-red-500 rounded-full text-white transition-colors"
+                    aria-label="Clear all characters"
+                    disabled={isComponentModeDisabled}
                   >
-                    16:9
+                    <X className="w-4 h-4" />
                   </button>
+                )}
+              </div>
+              {allAdditionalCharacters.length > 0 && !isComponentModeDisabled && (
+                <div className="flex gap-2 overflow-x-auto p-3 bg-white/5 border border-white/10 rounded-xl">
+                  {allAdditionalCharacters.map((item) => (
+                    <img key={item.id} src={item.preview} alt={item.name || 'Character'} title={item.name || 'Character'} className="w-20 h-20 object-cover border-2 border-white/20 rounded-lg flex-shrink-0" />
+                  ))}
+                </div>
+              )}
+
+              <div className={`relative ${isComponentModeDisabled ? 'opacity-30' : ''}`}>
+                <ImageDropzone
+                  title="Additional Reference Elements (Optional)"
+                  onFileChange={handleElementChange}
+                  icon={<ImageIcon className="w-6 h-6" />}
+                  aspectClass="aspect-[4/1]"
+                  multiple={true}
+                  disabled={isComponentModeDisabled}
+                />
+                {elements.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => setAspectRatio("9:16 portrait")}
-                    className={`p-2 px-4 font-bold border-l-4 border-black ${aspectRatio.includes("portrait") ? 'bg-yellow-400' : 'bg-white'} hover:bg-yellow-200`}
+                    onClick={clearElements}
+                    className="absolute top-12 right-2 p-2 bg-red-500/80 hover:bg-red-500 rounded-full text-white transition-colors"
+                    aria-label="Clear all elements"
+                    disabled={isComponentModeDisabled}
                   >
-                    9:16
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {elements.length > 0 && !isComponentModeDisabled && (
+                <div className="flex gap-2 overflow-x-auto p-3 bg-white/5 border border-white/10 rounded-xl">
+                  {elements.map((item) => (
+                    <img key={item.id} src={item.preview} alt="Element" className="w-20 h-20 object-cover border-2 border-white/20 rounded-lg flex-shrink-0" />
+                  ))}
+                </div>
+              )}
+
+              <div className="space-y-5 p-6 bg-white/5 border border-white/10 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Advanced Options</h3>
+
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                    <Film className="w-4 h-4 text-purple-400" />
+                    Aspect Ratio
+                  </label>
+                  <div className="flex bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setAspectRatio("16:9 landscape")}
+                      className={`px-4 py-2 text-sm font-medium transition-colors ${aspectRatio.includes("landscape") ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-white'}`}
+                    >
+                      16:9
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAspectRatio("9:16 portrait")}
+                      className={`px-4 py-2 text-sm font-medium border-l border-white/10 transition-colors ${aspectRatio.includes("portrait") ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-white'}`}
+                    >
+                      9:16
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                    <User className="w-4 h-4 text-purple-400" />
+                    Remove Main Subject
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsSubjectRemoved(!isSubjectRemoved)}
+                    disabled={!characterPreview && !overrideFile}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isSubjectRemoved ? 'bg-red-500' : 'bg-gray-600'} ${!characterPreview && !overrideFile ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isSubjectRemoved ? 'translate-x-6' : 'translate-x-1'}`} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                    <Check className="w-4 h-4 text-purple-400" />
+                    Enforce Scene Consistency
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsSceneLocked(!isSceneLocked)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isSceneLocked ? 'bg-green-500' : 'bg-gray-600'} cursor-pointer`}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isSceneLocked ? 'translate-x-6' : 'translate-x-1'}`} />
                   </button>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <label htmlFor="remove-subject" className="text-sm font-bold text-black flex items-center gap-2">
-                  <User className="w-4 h-4" /> Remove Main Subject
-                </label>
+              {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                  <p className="text-sm text-red-400 font-medium"><span className="font-bold">Error:</span> {error}</p>
+                </div>
+              )}
+
+              <div className="flex justify-between gap-4 pt-4">
                 <button
                   type="button"
-                  id="remove-subject"
-                  role="switch"
-                  aria-checked={isSubjectRemoved}
-                  onClick={() => setIsSubjectRemoved(!isSubjectRemoved)}
-                  className="flex-shrink-0"
-                  disabled={!characterPreview && !overrideFile}
+                  onClick={onBack}
+                  disabled={isLoading}
+                  className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium transition-all flex items-center gap-2 disabled:opacity-30"
                 >
-                  {isSubjectRemoved ? (
-                    <ToggleRight className="w-10 h-10 text-red-500" />
+                  <ArrowLeft className="w-5 h-5" />
+                  Back
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={!actionPrompt || isLoading}
+                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:from-gray-600 disabled:to-gray-600 disabled:opacity-50 text-white rounded-xl font-medium transition-all hover:scale-105 disabled:hover:scale-100 flex items-center gap-3"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span className="text-sm">{currentGeneratingText}</span>
+                    </>
                   ) : (
-                    <ToggleLeft className="w-10 h-10 text-gray-500" />
+                    <>
+                      <Wand2 className="w-5 h-5" />
+                      Generate Scene
+                    </>
                   )}
                 </button>
               </div>
 
-              <div className="flex items-center justify-between">
-                <label htmlFor="lock-scene" className="text-sm font-bold text-black flex items-center gap-2">
-                  <Lock className="w-4 h-4" /> Enforce Scene Consistency
-                </label>
-                <button
-                  type="button"
-                  id="lock-scene"
-                  role="switch"
-                  aria-checked={isSceneLocked}
-                  onClick={() => setIsSceneLocked(!isSceneLocked)}
-                  className="flex-shrink-0"
-                >
-                  {isSceneLocked ? (
-                    <ToggleRight className="w-10 h-10 text-green-500" />
-                  ) : (
-                    <ToggleLeft className="w-10 h-10 text-gray-500" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <div className="p-3 bg-red-400 border-4 border-black text-black neo-shadow">
-                <span className="font-bold">Error:</span> {error}
-              </div>
-            )}
-
-            <div className="flex justify-between gap-4 pt-4">
-              <button
-                type="button"
-                onClick={onBack}
-                disabled={isLoading}
-                className="neo-button bg-gray-300 flex items-center gap-2 disabled:opacity-50"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                Back
-              </button>
-
-              <button
-                type="submit"
-                disabled={!actionPrompt || isLoading}
-                className="neo-button bg-yellow-400 flex items-center gap-2 disabled:bg-gray-400 disabled:neo-shadow-disabled"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    {currentGeneratingText}
-                  </>
-                ) : (
-                  <>
-                    <Wand2 className="w-5 h-5" />
-                    Generate Scene
-                  </>
-                )}
-              </button>
-            </div>
-
-            {!actionPrompt && (
-              <p className="text-sm text-center font-bold text-red-600">
-                Action Prompt is required.
-              </p>
-            )}
-          </form>
+              {!actionPrompt && !isLoading && (
+                <p className="text-sm text-center text-gray-500">
+                  Action prompt is required to generate scenes
+                </p>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </div>
